@@ -1,0 +1,29 @@
+{
+  "name": "dez-php/dez-devtools",
+  "description": "DevTools for DezMicro & DezWeb applications",
+  "keywords": ["dev dev-tools","dev-tools"],
+  "authors": [
+    {
+      "name": "Ivan Gontarenko",
+      "email": "vania.gontarenko@gmail.com"
+    }
+  ],
+  "license": "MIT",
+  "type": "library",
+  "minimum-stability": "dev",
+  "prefer-stable" : true,
+  "require": {
+    "php": ">=5.5",
+    "dez-php/dez-cli": ">=1.0",
+    "dez-php/dez-db": ">=1.0",
+    "dez-php/dez-view": ">=1.0"
+  },
+  "bin": [
+    "bin/dez-tool"
+  ],
+  "autoload": {
+    "psr-4": {
+      "Dez\\Dev\\": "src/DevTools"
+    }
+  }
+}

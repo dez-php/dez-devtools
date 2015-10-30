@@ -1,0 +1,13 @@
+#!/usr/bin/env php
+<?php
+
+
+
+$composerAutoloader = __DIR__ . '/../vendor/autoload.php';
+
+if( ! file_exists( $composerAutoloader ) ) {
+    die( 'Install composer' . PHP_EOL );
+}
+
+include_once $composerAutoloader;
+include_once __DIR__ . '/../src/DevTools/Index.php';
