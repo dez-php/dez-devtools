@@ -43,30 +43,45 @@
             $this->writeln( '  [info]Configure view[/info]' );
             $view       = $this->getView();
 
+            $table              = $this->getConfig()->get( 'tableName' );
+            $generatedName      = 'Entity_' . md5( $table );
+
             $view->setViewDirectory( __DIR__ . '/Template' );
             $view->set( 'generator', $this );
             $view->set( 'columns', $this->getColumns() );
             $view->set( 'table', $this->getConfig()->get( 'tableName' ) );
             $view->set( 'namespace', $this->getConfig()->get( 'namespace' ) );
+            $view->set( 'entityName', $generatedName );
 
-            $content    = $view->fetch( 'OrmEntity.html' );
+            $generatedContent       = $view->fetch( 'GeneratedOrmEntity.html' );
+            $userContent            = $view->fetch( 'OrmEntity.html' );
             $this->writeln( '  [info]Render entity content[/info]' );
 
             $workDirectory      = $this->getConfig()->get( 'currentDirectory' );
             $entityDirectory    = $this->getConfig()->get( 'entityDirectory' );
-            $entityDirectory    = "$workDirectory/$entityDirectory";
 
-            if( ! file_exists( $entityDirectory ) ) {
-                $this->writeln( '  [info]Createing directory for entity: '. $entityDirectory .'[/info]' );
-                mkdir( $entityDirectory, 0777, true );
+            $entityDirectory    = "$workDirectory/$entityDirectory";
+            $generatedEntity    = "$entityDirectory/GeneratedEntity";
+
+            if( ! is_dir( $generatedEntity ) ) {
+                $this->writeln( '  [info]Creating directory for entity: '. $generatedEntity .'[/info]' );
+                mkdir( $generatedEntity, 0777, true );
             }
 
-            $entityFile         = $this->camelize( $this->getConfig()->get( 'tableName' ) );
+            $entityFile         = $this->camelize( $table );
 
-            $this->writeln( '  [info]Put content to entity[/info]' );
-            file_put_contents( "$entityDirectory/$entityFile.php", $content );
+            $userFile           = "$entityDirectory/$entityFile.php";
+            $generatedFile      = "$generatedEntity/$generatedName.php";
 
-            return $this->wellDone();
+            $this->writeln( '  [info]Updated entity '. $generatedFile .'[/info]' );
+            file_put_contents( $generatedFile, $generatedContent );
+
+            if( ! file_exists( $userFile ) ) {
+                $this->writeln( '  [info]Create user file '. $userFile .'[/info]' );
+                file_put_contents( $userFile, $userContent );
+            }
+
+            return $this;
         }
 
         /**
@@ -106,18 +121,6 @@
          */
         public function currectDate() {
             return date( 'Y-m-d H:i:s' );
-        }
-
-        public function wellDone() {
-            $tableName  = $this->camelize( $this->getConfig()->get( 'tableName' ) );
-            $message    = " Entity was created '$tableName' ";
-            $length     = strlen( $message );
-
-            $this->writeln()->writeln( '  [style bg="green"]'. str_repeat( ' ', $length ) .'[/style]' );
-            $this->writeln( '  [style bg="green"]'. $message .'[/style]' );
-            $this->writeln( '  [style bg="green"]'. str_repeat( ' ', $length ) .'[/style]' )->writeln();
-
-            return $this;
         }
 
         /**

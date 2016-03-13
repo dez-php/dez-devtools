@@ -5,6 +5,7 @@
         "This file is @generated automatically"
     ],
     "hash": "92c7f6fdd962b2ec30a9a658d38a02f6",
+    "content-hash": "fe959e4bd44a59d46004069bd9f23c73",
     "packages": [
         {
             "name": "dez-php/dez-cli",
@@ -92,16 +93,16 @@
         },
         {
             "name": "dez-php/dez-configuration",
-            "version": "v1.0.0",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dez-php/dez-configuration.git",
-                "reference": "ec5fa210386efe55f80741759d36a1acf95c66c1"
+                "reference": "96151e60b878845e7913f2c32e0329a2ff485235"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dez-php/dez-configuration/zipball/ec5fa210386efe55f80741759d36a1acf95c66c1",
-                "reference": "ec5fa210386efe55f80741759d36a1acf95c66c1",
+                "url": "https://api.github.com/repos/dez-php/dez-configuration/zipball/96151e60b878845e7913f2c32e0329a2ff485235",
+                "reference": "96151e60b878845e7913f2c32e0329a2ff485235",
                 "shasum": ""
             },
             "require": {
@@ -130,7 +131,7 @@
                 "dez-php config",
                 "php config"
             ],
-            "time": "2015-09-01 14:47:55"
+            "time": "2015-11-25 09:22:42"
         },
         {
             "name": "dez-php/dez-db",
@@ -261,16 +262,16 @@
         },
         {
             "name": "dez-php/dez-view",
-            "version": "v1.0.2",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dez-php/dez-view.git",
-                "reference": "7a89fc5fcf3a899539f666198b9c303e99ab2d4f"
+                "reference": "9aab478cf3b0b82cea044bd236c7dfcc959f467c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dez-php/dez-view/zipball/7a89fc5fcf3a899539f666198b9c303e99ab2d4f",
-                "reference": "7a89fc5fcf3a899539f666198b9c303e99ab2d4f",
+                "url": "https://api.github.com/repos/dez-php/dez-view/zipball/9aab478cf3b0b82cea044bd236c7dfcc959f467c",
+                "reference": "9aab478cf3b0b82cea044bd236c7dfcc959f467c",
                 "shasum": ""
             },
             "require": {
@@ -301,7 +302,7 @@
                 "php view",
                 "view"
             ],
-            "time": "2015-10-10 12:30:53"
+            "time": "2015-12-29 11:04:24"
         }
     ],
     "packages-dev": [],

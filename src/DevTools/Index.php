@@ -7,7 +7,6 @@
     use Dez\Cli\IO\Input;
     use Dez\Cli\IO\InputOption;
     use Dez\Cli\IO\Output;
-    use Dez\Config\Adapter\Json as ConfigJson;
     use Dez\Config\Config;
     use Dez\Db\Connection;
     use Dez\DependencyInjection\Container;
@@ -32,13 +31,17 @@
 
             $output->writeln( '[info]Starting...[/info]' );
 
-            $config     = new ConfigJson( "$currentDirectory/app/config/connection.json" );
+            $configFile = "$currentDirectory/app/config/app.php";
+
+            $output->writeln("[info]Load config... {$configFile}[/info]");
+
+            $config     = Config::factory( $configFile );
 
             $view       = new View();
             $view->setDi( Container::instance() )
                 ->registerEngine( '.html', new Php( $view ) );
 
-            $connection = new Connection( $config['db']['connection'][$connectionName] );
+            $connection = new Connection( $config['db'][$connectionName] );
 
             $generator  = new OrmEntity();
 
