@@ -1,65 +1,68 @@
 <?php
 
-    namespace Dez\Dev;
+namespace Dez\Dev;
 
-    use Dez\Dev\Generator\OrmEntity;
-    use Dez\Cli\Cli;
-    use Dez\Cli\IO\Input;
-    use Dez\Cli\IO\InputOption;
-    use Dez\Cli\IO\Output;
-    use Dez\Config\Config;
-    use Dez\Db\Connection;
-    use Dez\DependencyInjection\Container;
-    use Dez\View\Engine\Php;
-    use Dez\View\View;
+use Dez\Dev\Generator\OrmEntity;
+use Dez\Cli\Cli;
+use Dez\Cli\IO\Input;
+use Dez\Cli\IO\InputOption;
+use Dez\Cli\IO\Output;
+use Dez\Config\Config;
+use Dez\Db\Connection;
+use Dez\DependencyInjection\Container;
+use Dez\View\Engine\Php;
+use Dez\View\View;
 
-    $application    = new Cli();
+$application = new Cli();
 
-    $application->register( 'orm_entity' )
-        ->setDescription( 'Entity generator for DezORM' )
-        ->addOption( 'connection', 'c', InputOption::REQUIRED )
-        ->addOption( 'table', 't', InputOption::REQUIRED )
-        ->addOption( 'directory', 'd', InputOption::REQUIRED )
-        ->addOption( 'namespace', 'n', InputOption::REQUIRED )
-        ->setCallback( function( Input $input, Output $output ) use ( $application ) {
+$application->register('orm_entity')
+    ->setDescription('Entity generator for DezORM')
+    ->addOption('table', 't', InputOption::REQUIRED)
+    ->addOption('directory', 'd', InputOption::REQUIRED)
+    ->addOption('namespace', 'n', InputOption::REQUIRED)
+    ->addOption('config', 'c', InputOption::REQUIRED)
+    ->setCallback(function (Input $input, Output $output) use ($application) {
 
-            $currentDirectory   = getcwd();
-            $connectionName     = $input->getOption( 'connection' );
-            $tableName          = $input->getOption( 'table' );
-            $directory          = $input->getOption( 'directory' );
-            $namespace          = $input->getOption( 'namespace' );
+        $currentDirectory = getcwd();
+        $tableName = $input->getOption('table');
+        $directory = $input->getOption('directory');
+        $namespace = $input->getOption('namespace');
+        $config = $input->getOption('config');
 
-            $output->writeln( '[info]Starting...[/info]' );
+        $output->writeln('[info]Starting...[/info]');
 
-            $configFile = "$currentDirectory/app/config/app.php";
+        $configFile = "$currentDirectory/$config";
 
-            $output->writeln("[info]Load config... {$configFile}[/info]");
+        if(! file_exists($configFile)) {
+            throw new \InvalidArgumentException('Config file not exist');
+        }
 
-            $config     = Config::factory( $configFile );
+        $output->writeln("[info]Load config... {$configFile}[/info]");
 
-            $view       = new View();
-            $view->setDi( Container::instance() )
-                ->registerEngine( '.html', new Php( $view ) );
+        $config = Config::factory($configFile);
 
-            $connection = new Connection( $config['db'][$connectionName] );
+        $view = new View();
+        $view->setDi(Container::instance())
+            ->registerEngine('.html', new Php($view));
 
-            $generator  = new OrmEntity();
+        $connection = new Connection($config['db']['connection'][$config['db']['connection_name']]);
 
-            $generator->setConnection( $connection );
-            $generator->setView( $view );
-            $generator->setCli( $application );
-            $generator->setConfig( new Config( [
-                'currentDirectory'  => $currentDirectory,
-                'connectionName'    => $connectionName,
-                'tableName'         => $tableName,
-                'entityDirectory'   => $directory,
-                'namespace'         => $namespace,
-            ] ) );
+        $generator = new OrmEntity();
 
-            $generator->execute();
+        $generator->setConnection($connection);
+        $generator->setView($view);
+        $generator->setCli($application);
+        $generator->setConfig(new Config([
+            'currentDirectory' => $currentDirectory,
+            'tableName' => $tableName,
+            'entityDirectory' => $directory,
+            'namespace' => $namespace,
+        ]));
 
-            $output->writeln( '[info]Finish[/info]' );
+        $generator->execute();
 
-        } );
+        $output->writeln('[info]Finish[/info]');
 
-    $application->execute();
+    });
+
+$application->execute();
